@@ -12,9 +12,15 @@
 #include "pinmappings.h"
 #include "clock.h"
 #include "gpio.h"
+#include "random_numbers.h"
 
-// map the led to GPIO PA8
-gpio_pin_t led = {PI_1, GPIOI, GPIO_PIN_1};
+// map the led to GPIO pins
+gpio_pin_t led1 = {PI_1, GPIOI, GPIO_PIN_1};
+gpio_pin_t led2 = {PB_14, GPIOB, GPIO_PIN_14};
+gpio_pin_t led3 = {PB_15, GPIOB, GPIO_PIN_15};
+gpio_pin_t led4 = {PI_2, GPIOI, GPIO_PIN_2};
+gpio_pin_t led5 = {PA_15, GPIOA, GPIO_PIN_15};
+gpio_pin_t led6 = {PA_8, GPIOA, GPIO_PIN_8};
 
 // this is the main method
 int main()
@@ -24,14 +30,19 @@ int main()
   HAL_Init();
   init_sysclk_216MHz();
   
-  // initialise the gpio pin
-  init_gpio(led, OUTPUT);
+  // initialise the gpio pins
+  init_gpio(led1, OUTPUT);
+	init_gpio(led2, OUTPUT);
+	init_gpio(led3, OUTPUT);
+	init_gpio(led4, OUTPUT);
+	init_gpio(led5, OUTPUT);
+	init_gpio(led6, OUTPUT);
   
   // loop forever ...
   while(1)
   {
     // toggle the led on the gpio pin
-    toggle_gpio(led);
+   
     
     // wait for 1 second
     HAL_Delay(1000);
