@@ -15,6 +15,11 @@
 #include "pinmappings.h"
 #include "clock.h"
 #include "stm32746g_discovery_lcd.h"
+// Include the studio libary
+#include <stdio.h>
+#include "adc.h"
+
+gpio_pin_t pot = {PA_0, GPIOA, GPIO_PIN_0};
 
 // LCD DEFINES
 
@@ -38,6 +43,7 @@ int main()
   HAL_Init();
   init_sysclk_216MHz();
   
+	init_adc(pot);
   // initialise the lcd
   BSP_LCD_Init();
   BSP_LCD_LayerDefaultInit(LTDC_ACTIVE_LAYER, SDRAM_DEVICE_ADDR);
@@ -61,17 +67,22 @@ int main()
   HAL_Delay(5000);
   
   // display an "uptime" counter
-  BSP_LCD_DisplayStringAtLine(5, (uint8_t *)"Current uptime =");
+//  BSP_LCD_DisplayStringAtLine(5, (uint8_t *)"Current uptime =");
   int counter = 0;
+	
   while(1)
   {
     // format a string based around the uptime counter
-    char str[20];
-    sprintf(str, "%d s", counter++);
-    
-    // print the message to the lcd
-    BSP_LCD_ClearStringLine(6);
-    BSP_LCD_DisplayStringAtLine(6, (uint8_t *)str);
+//    char str[20];
+//    sprintf(str, "%d s", counter++);
+//    // print the message to the lcd
+//    BSP_LCD_ClearStringLine(6);
+//    BSP_LCD_DisplayStringAtLine(6, (uint8_t *)str);
+		uint16_t adc_val = read_adc(pot);
+		float percent = (adc_val/4095.0) * 100;
+		char str[20];
+		sprintf(str, "ADC = %3.2f", percent);
+		BSP_LCD_DisplayStringAtLine(6, (uint8_t *)str);
     
     HAL_Delay(1000);
   }
