@@ -75,40 +75,66 @@ int main()
   BSP_LCD_DisplayStringAtLine(2, (uint8_t *)welcome_message[1]);
   BSP_LCD_DisplayStringAtLine(3, (uint8_t *)BOARDER); 
   
-  
-  // delay a little ...
-  HAL_Delay(5000);
-  
-  // display an "uptime" counter
-//  BSP_LCD_DisplayStringAtLine(5, (uint8_t *)"Current uptime =");
-  int counter = 0;
+  // calibration
 	
+	// print progress message
+	BSP_LCD_DisplayStringAtLine(4, (uint8_t *)"CALIBRATING ..."); 
+	
+	// calibration variables
+	uint16_t sensor_min = 4096;
+	uint16_t sensor_max = 0;
+	uint32_t end_time = HAL_GetTick() + 5000;
+	
+	// calibration loop
+	while(HAL_GetTick() < end_time)
+	{
+		// read current sensor value
+		uint16_t sensor_value = read_adc(ldr);
+		
+		// check against the max and min values
+		if(sensor_value > sensor_max)
+		{
+			sensor_max = sensor_value;
+		}		
+		if(sensor_value < sensor_min)
+		{
+			sensor_min = sensor_value;
+		}
+	}
+	
+	// display those values
+	char calib_str[25];
+	sprintf(calib_str, "MAX = %4d : MIN = %4d", sensor_max, sensor_min);
+	BSP_LCD_DisplayStringAtLine(4, (uint8_t *)calib_str); 
+	
+	// main loop
   while(1)
   {
-    // format a string based around the uptime counter
-//    char str[20];
-//    sprintf(str, "%d s", counter++);
-//    // print the message to the lcd
-//    BSP_LCD_ClearStringLine(6);
-//    BSP_LCD_DisplayStringAtLine(6, (uint8_t *)str);
+		// read adc values ...
 		
+		// temp
 		uint16_t adc_val = read_adc(temp);
 		float adc_vol = (adc_val/4095.0) * 3.3;
 		float adc_temp = ((adc_vol * 1000) - 500) / 10.0;
     	
+		// light
+
     uint16_t ldr_val = read_adc(ldr);		
-		float ldr = ldr_val;
-		//Drawing a rectangle - BSP_LCD_FillRect(xpos,ypos,  Height,  Width)    
+		float fldr_val = ldr_val;
+		float fsensor_max = sensor_max;
+		float ldr = (fldr_val / fsensor_max) * 100.0; 
 	
-		
+		// display temperature
 		char str[20];
 		sprintf(str, "Temp = %3.2f", adc_temp);
 		BSP_LCD_DisplayStringAtLine(6, (uint8_t *)str);
 		
+		// display light
 		char ldr_str[20];
 		sprintf(ldr_str, "LDR Value = %3.2f", ldr);
 		BSP_LCD_DisplayStringAtLine(8, (uint8_t *)ldr_str);
 		
+		// thresholds ...
 		if (adc_val > 0 && adc_val< 1365)
 		{
 			write_gpio(led1, HIGH);	
