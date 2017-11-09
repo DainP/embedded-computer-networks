@@ -131,7 +131,7 @@ int main()
 		
 		// display light
 		char ldr_str[20];
-		sprintf(ldr_str, "LDR Value = %3.2f", ldr);
+		sprintf(ldr_str, "LDR Value = %3.2f%% ", ldr);
 		BSP_LCD_DisplayStringAtLine(8, (uint8_t *)ldr_str);
 		
 		// thresholds ...
