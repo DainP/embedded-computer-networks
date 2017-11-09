@@ -376,9 +376,9 @@
           <GroupName>application</GroupName>
           <Files>
             <File>
-              <FileName>main.c</FileName>
+              <FileName>Task3.c</FileName>
               <FileType>1</FileType>
-              <FilePath>..\src\main.c</FilePath>
+              <FilePath>.\Task3.c</FilePath>
             </File>
           </Files>
         </Group>
