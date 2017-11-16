@@ -74,7 +74,7 @@
 //   <i> Enable stack overflow checks at thread switch.
 //   <i> Enabling this option increases slightly the execution time of a thread switch.
 #ifndef OS_STKCHECK
- #define OS_STKCHECK    1
+ #define OS_STKCHECK    0
 #endif
  
 //   <q>Stack usage watermark
