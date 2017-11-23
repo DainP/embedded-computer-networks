@@ -24,6 +24,7 @@ typedef struct
   float     voltage;
   float     current;
   uint32_t  counter;
+	uint32_t other_thing;
 } 
 mail_t;
 
